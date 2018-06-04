@@ -14,9 +14,14 @@ const DICE_SELECTOR = '.dice';
 
 const scores = [0, 0];
 let roundScore = 0;
-let activePlayer = 1;
+let activePlayer = 0;
 
 document.querySelector(DICE_SELECTOR).style.display = 'none';
+
+document.getElementById('score-0').textContent = '0';
+document.getElementById('current-0').textContent = '0';
+document.getElementById('score-1').textContent = '0';
+document.getElementById('current-1').textContent = '0';
 
 document.querySelector('.btn-roll').addEventListener(CLICK, () => {
   // 1. Random number
@@ -28,5 +33,20 @@ document.querySelector('.btn-roll').addEventListener(CLICK, () => {
   diceSelect.src = `dice-${dice}.png`;
 
   // 3. Update the round score IF the rolled number was not a 1
+  if (dice !== 1) {
+    // Add score
+    roundScore += dice;
+    document.querySelector(`#current-${activePlayer}`).textContent = roundScore;
+  } else {
+    // Next player
+    document.querySelector('.player-0-panel').classList.toggle('active');
+    document.querySelector('.player-1-panel').classList.toggle('active');
+    activePlayer = activePlayer === 0 ? 1 : 0;
+    roundScore = 0;
+    document.getElementById('current-0').textContent = '0';
+    document.getElementById('current-1').textContent = '0';
+    document.querySelector(DICE_SELECTOR).style.display = 'none';
+  }
+
 
 });
