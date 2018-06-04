@@ -9,16 +9,24 @@ GAME RULES:
 
 */
 
+const CLICK = 'click';
+const DICE_SELECTOR = '.dice';
+
 const scores = [0, 0];
 let roundScore = 0;
 let activePlayer = 1;
-let dice = Math.floor(Math.random() * 6) + 1;
 
-document.querySelector(`#current-${activePlayer}`).textContent = dice;
+document.querySelector(DICE_SELECTOR).style.display = 'none';
 
-// document.querySelector(`#current-${activePlayer}`).innerHTML = `<em>${dice}</em>`;
+document.querySelector('.btn-roll').addEventListener(CLICK, () => {
+  // 1. Random number
+  let dice = Math.floor(Math.random() * 6) + 1;
 
-let x = document.querySelector(`#score-${activePlayer}`).textContent;
-console.log(x);
+  // 2. Display the result
+  const diceSelect = document.querySelector(DICE_SELECTOR);
+  diceSelect.style.display = 'block';
+  diceSelect.src = `dice-${dice}.png`;
 
-document.querySelector('.dice').style.display = 'none';
+  // 3. Update the round score IF the rolled number was not a 1
+
+});
