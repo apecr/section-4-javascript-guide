@@ -19,7 +19,8 @@ const initialiceGame = () => ({
   scores: [0, 0],
   roundScore: 0,
   activePlayer: 0,
-  gamePlaying: true
+  gamePlaying: true,
+  previousDice: 0
 });
 const prepareDom = () => {
   document.querySelector(DICE_SELECTOR).style.display = 'none';
@@ -49,6 +50,7 @@ const changeUser = () => {
   document.querySelector('.player-1-panel').classList.toggle('active');
   game.activePlayer = game.activePlayer === 0 ? 1 : 0;
   game.roundScore = 0;
+  game.previousDice = 0;
   document.getElementById('current-0').textContent = '0';
   document.getElementById('current-1').textContent = '0';
   document.querySelector(DICE_SELECTOR).style.display = 'none';
@@ -56,7 +58,7 @@ const changeUser = () => {
 
 document.querySelector('.btn-roll').addEventListener(CLICK, () => {
   if (game.gamePlaying) {
-  // 1. Random number
+    // 1. Random number
     let dice = Math.floor(Math.random() * 6) + 1;
 
     // 2. Display the result
@@ -65,12 +67,23 @@ document.querySelector('.btn-roll').addEventListener(CLICK, () => {
     diceSelect.src = `dice-${dice}.png`;
 
     // 3. Update the round score IF the rolled number was not a 1
-    if (dice !== 1) {
-    // Add score
+    if (dice === 6 && game.previousDice === 6) {
+      game.roundScore = 0;
+
+      // Add current score to the player global score
+      game.scores[game.activePlayer] = 0;
+
+      // Update the UI
+      document.getElementById(`score-${game.activePlayer}`).textContent = game.scores[game.activePlayer];
+      document.querySelector(`#current-${game.activePlayer}`).textContent = game.roundScore;
+      changeUser();
+    } else if (dice !== 1) {
+      // Add score
       game.roundScore += dice;
       document.querySelector(`#current-${game.activePlayer}`).textContent = game.roundScore;
+      game.previousDice = dice;
     } else {
-    // Next player
+      // Next player
       changeUser();
     }
   }
@@ -78,7 +91,7 @@ document.querySelector('.btn-roll').addEventListener(CLICK, () => {
 
 document.querySelector('.btn-hold').addEventListener(CLICK, () => {
   if (game.gamePlaying) {
-  // Add current score to the player global score
+    // Add current score to the player global score
     game.scores[game.activePlayer] += game.roundScore;
 
     // Update the UI
