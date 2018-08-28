@@ -94,9 +94,14 @@ document.querySelector('.btn-hold').addEventListener(CLICK, () => {
     // Add current score to the player global score
     game.scores[game.activePlayer] += game.roundScore;
 
+    let finalScore = document.querySelector('.final-score').value;
+    console.log(finalScore);
+
+    finalScore = finalScore ? finalScore : 100;
+
     // Update the UI
     document.getElementById(`score-${game.activePlayer}`).textContent = game.scores[game.activePlayer];
-    if (game.scores[game.activePlayer] >= 100) {
+    if (game.scores[game.activePlayer] >= finalScore) {
       document.querySelector(`#name-${game.activePlayer}`).textContent = 'Winner!';
       document.querySelector(DICE_SELECTOR).style.display = 'none';
       document.querySelector(`.player-${game.activePlayer}-panel`).classList.add('winner');
